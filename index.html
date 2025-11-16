@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PET-Saúde Equidade | Educação Profissional Equidade em Saúde</title>
+    
+    
+    <!-- Carregamento do Tailwind CSS para utilitários de estilo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuração de fonte global e cores (Cartela: Laranja, Magenta, Marrom, Roxo Escuro, Roxo Claro) */
+        :root {
+            --color-orange: #FDB92F;
+            --color-magenta: #FF0080;
+            --color-brown: #6B5344;
+            --color-purple-dark: #5B3A8C;
+            --color-purple-light: #B89FCC;
+            --color-primary: #5B3A8C;
+            --color-secondary: #FF0080;
+        }
+        .text-primary { color: var(--color-primary); }
+        .bg-primary { background-color: var(--color-primary); }
+        .text-secondary { color: var(--color-secondary); }
+        .bg-secondary { background-color: var(--color-secondary); }
+
+        /* Estilos de scroll suave e comportamento da barra de navegação fixa */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Estilo para links ativos no menu de navegação - Desktop */
+        .nav-link:hover {
+            color: #FF0080;
+            font-weight: 600;
+        }
+
+        /* Estilo para a imagem da personagem Rosa */
+        .character-presenter {
+            width: 150px; /* Tamanho da imagem */
+            height: auto;
+            position: absolute;
+            right: -75px; /* Ajuste para sair um pouco da caixa */
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        /* Reposicionamento para seções específicas (para evitar sobreposição com o texto) */
+        /* Ajusta a posição da Rosa para ficar dentro do limite da seção em telas maiores, 
+           aplicando um estilo consistente de 'guia' */
+        #estrutura .character-presenter,
+        #tecnologias .character-presenter,
+        #inscricoes .character-presenter,
+        #objetivos .character-presenter,
+        #metodologia .character-presenter,
+        #atividades .character-presenter,
+        #cronograma .character-presenter,
+        #movimentos .character-presenter,
+        #equipe .character-presenter,
+        #certificacao .character-presenter,
+        #bibliografia .character-presenter,
+        #contato .character-presenter {
+            right: 0px; /* Mantém dentro do limite da seção */
+            top: 10%;
+            transform: translateY(0);
+            width: 120px; /* Ligeiramente menor */
+        }
+        
+        /* Ajuste específico para a seção Sobre, para manter o posicionamento original mais aberto */
+        #sobre .character-presenter {
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+        }
+
+        /* Responsividade para a imagem da personagem */
+        @media (max-width: 768px) {
+            .character-presenter {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                margin: 0 auto 20px auto; /* Centraliza acima da seção em mobile */
+                width: 100px; /* Menor em mobile */
+                display: block;
+            }
+        }
+
+        /* Personagem apresentadora fixa (desktop) - ajuste de posição e tamanho */
+        #rosa-presenter {
+            position: fixed;
+            right: 28px;
+            bottom: 100px;
+            z-index: 70;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            pointer-events: none; /* permite clique somente nos elementos específicos */
+            transition: transform 220ms ease;
+            transform-origin: bottom right;
+        }
+
+        #rosa-presenter img {
+            width: 120px;
+            height: auto;
+            pointer-events: auto; /* imagem responde a clique para abrir/fechar bubble */
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .rosa-bubble {
+            background: linear-gradient(180deg,#ffffff 0%, #f8fafc 100%);
+            color: var(--color-primary);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(16,24,40,0.12);
+            font-weight: 600;
+            display: none;
+            max-width: 280px;
+            pointer-events: auto;
+            line-height: 1.2;
+            font-size: 0.95rem;
+        }
+
+        /* Seta do balão apontando para a personagem */
+        .rosa-bubble::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid white;
+            right: -6px;
+            bottom: 10px;
+            transform: translateX(50%);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.04));
+        }
+
+        /* Mostrar balão quando a classe 'show' está presente */
+        #rosa-presenter.show .rosa-bubble { display: block; }
+
+        /* Pequeno movimento quando aparece */
+        #rosa-presenter.show { transform: translateY(-6px); }
+
+        @media (max-width: 1024px) {
+            #rosa-presenter { right: 18px; bottom: 80px; }
+            #rosa-presenter img { width: 110px; }
+            .rosa-bubble { max-width: 220px; font-size: 0.92rem; }
+        }
+
+        @media (max-width: 768px) {
+            #rosa-presenter { display: none; }
+        }
+
+        /* Oculta Rosa em mobile (descomente se quiser ocultá-la completamente em mobile) */
+        /*
+        @media (max-width: 768px) {
+            .character-presenter {
+                display: none !important;
+            }
+        }
+        */
+    </style>
+    <script>
+        // Configuração customizada do Tailwind para cores
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ufpi-blue': '#5B3A8C',
+                        'esp-teal': '#FF0080',
+                        'orange-accent': '#FDB92F',
+                        'brown-accent': '#6B5344',
+                        'purple-light': '#B89FCC',
+                    }
+                }
+            }
+        }
+        
+        // Função para alternar o menu mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            
+            button.addEventListener('click', () => {
+                const isExpanded = button.getAttribute('aria-expanded') === 'true' || false;
+                button.setAttribute('aria-expanded', !isExpanded);
+                menu.classList.toggle('hidden');
+            });
+            
+            // Fechar o menu ao clicar em um link
+            const links = menu.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    button.setAttribute('aria-expanded', 'false');
+                    menu.classList.add('hidden');
+                });
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Seção de Cabeçalho/Navegação -->
+    <header class="sticky top-0 z-50 bg-white shadow-lg">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo/Título -->
+                <div class="flex items-center">
+                    <a href="#home" class="flex-shrink-0 text-xl font-extrabold" style="color: #5B3A8C;">
+                        PET-Saúde Equidade
+                    </a>
+                </div>
+
+                <!-- Menu de Navegação (Desktop) -->
+                <div class="hidden lg:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#sobre" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 transition duration-150">O Curso</a>
+                        <a href="#objetivos" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 transition duration-150">Objetivos</a>
+                        <a href="#estrutura" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 transition duration-150">Estrutura</a>
+                        <a href="#metodologia" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 transition duration-150">Metodologia</a>
+                        <a href="#cronograma" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 transition duration-150">Agenda</a>
+                            <a href="#contato" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 transition duration-150">Contato</a>
+                            <a href="login.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium" style="color: #5B3A8C;" onmouseover="this.style.color='#FF0080'" onmouseout="this.style.color='#5B3A8C'">Entrar</a>
+                    </div>
+                </div>
+
+                <!-- Botão de Inscrição (Desktop) -->
+                <div class="hidden lg:block">
+                    <a href="#inscricoes" class="text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md transition duration-200 transform hover:scale-105 show-rosa-on-click" style="background-color: #FDB92F; color: #5B3A8C;">
+                        Inscreva-se
+                    </a>
+                </div>
+
+                <!-- Botão de Menu (Mobile) -->
+                <div class="-mr-2 flex lg:hidden">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-ufpi-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ufpi-blue" aria-controls="mobile-menu" aria-expanded="false">
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Menu Mobile (oculto por padrão) -->
+        <div class="lg:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#sobre" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">O Curso</a>
+                <a href="#objetivos" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Objetivos</a>
+                <a href="#estrutura" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Estrutura</a>
+                <a href="#metodologia" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Metodologia</a>
+                <a href="#cronograma" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Agenda</a>
+                <a href="#atividades" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Atividades</a>
+                <a href="#equipe" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Equipe</a>
+                <a href="#contato" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Contato</a>
+                <a href="#inscricoes" class="block text-white px-3 py-2 mt-2 rounded-md text-base font-medium text-center show-rosa-on-click" style="background-color: #FF0080;">Inscreva-se Já!</a>
+                <a href="login.html" class="block px-3 py-2 mt-2 rounded-md text-base font-medium text-center" style="color: #5B3A8C;">Entrar</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="mt-0">
+
+                <!-- 1. Seção Home (Banner Principal) -->
+        <section id="home" class="text-white py-20 md:py-32 relative overflow-hidden" style="background-color: #5B3A8C;">            <!-- Padrão de fundo suave -->
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="100" height="100" fill="url(#pattern0)"/>
+                    <defs>
+                        <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="0.1" height="0.1">
+                            <path fill="white" d="M0.5 0 L1 1 L0 1 Z"/>
+                        </pattern>
+                    </defs>
+                </svg>
+            </div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center">
+                    <p class="text-xl md:text-2xl font-semibold mb-3" style="color: #FDB92F;">PET-Saúde Equidade | 2025–2026</p>
+                    <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-8">
+                        Educação Profissional Equidade em Saúde
+                    </h1>
+                    <a href="#inscricoes" class="px-10 py-4 rounded-xl text-lg md:text-xl font-bold shadow-2xl transition duration-300 transform hover:scale-105 show-rosa-on-click" style="background-color: #FDB92F; color: #5B3A8C;">
+                        Inscreva-se
+                    </a>
+                </div>
+
+                <!-- Destaques do Curso -->
+                <div class="mt-16 bg-white bg-opacity-90 rounded-2xl shadow-xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center" style="color: #5B3A8C;">
+                    <div class="p-2 border-r md:border-r-0 md:border-b-0 border-gray-200">
+                        <p class="text-2xl font-bold">Híbrido</p>
+                        <p class="text-sm">Modalidade</p>
+                    </div>
+                    <div class="p-2">
+                        <p class="text-2xl font-bold">60h</p>
+                        <p class="text-sm">Carga Horária</p>
+                    </div>
+                    <div class="p-2 border-r border-gray-200">
+                        <p class="text-2xl font-bold">ESP-PI</p>
+                        <p class="text-sm">Certificação</p>
+                    </div>
+                    <div class="p-2">
+                        <p class="text-2xl font-bold">Nov/2025 a Abr/2026</p>
+                        <p class="text-sm">Período</p>
+                    </div>
+                </div>
+
+                <!-- Missão e Logos de Parceria -->
+                <div class="mt-20">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <h2 class="text-3xl font-bold mb-4" style="color: #FF0080;">Nossa Missão</h2>
+                        <p class="text-lg font-light">
+                            Promover a formação de profissionais para práticas equânimes e éticas, combatendo desigualdades e fortalecendo o Sistema Único de Saúde (SUS) do Piauí.
+                        </p>
+                    </div>
+
+                    <!-- Logos Parceiros (Placeholders) -->
+                    <div class="mt-16 flex flex-wrap justify-center items-center space-x-8 md:space-x-16 opacity-80">
+                        <!-- Use placeholder simples para representar os logos, seguindo a diretriz de não usar URLs externas, exceto para o placehold.co -->
+                        <img src="/imagem/PET.png" alt="Logo PET Equidade" onerror="this.onerror=null; this.src='/imagem/PET.png';" class="h-10 md:h-14 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/NESP.png" alt="Logo NESP" onerror="this.onerror=null; this.src='/imagem/NESP.png';" class="h-10 md:h-14 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/UFPI.png" alt="Logo UFPI" onerror="this.onerror=null; this.src='/imagem/UFPI.png';" class="h-10 md:h-14 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/ESPPI.png" alt="Logo ESP-PI" onerror="this.onerror=null; this.src='/imagem/ESPPI.png';" class="h-10 md:h-14 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/SESAPI.png" alt="Logo SESAPI" onerror="this.onerror=null; this.src='/imagem/SESAPI.png';" class="h-10 md:h-14 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/SUS.png" alt="Logo SUS" onerror="this.onerror=null; this.src='/imagem/SUS.png';" class="h-10 md:h-14 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conteúdo Principal com Seções -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+
+            <!-- 2. Seção Sobre o Curso -->
+            <section id="sobre" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">2. Sobre o Curso</h2>
+
+                
+                <div class="grid md:grid-cols-2 gap-12 mb-16">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4" style="color: #FF0080;">2.1 Identificação</h3>
+                        <dl class="space-y-3 text-lg">
+                            <div class="flex flex-wrap items-center">
+                                <span class="font-semibold w-40 flex-shrink-0">Nome:</span>
+                                <span class="flex-1">Educação Profissional Equidade em Saúde</span>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <span class="font-semibold w-40 flex-shrink-0">Promotoras:</span>
+                                <span class="flex-1">PET-SAUDE,UFPI, NESP, ESP-PI, SESAPI, SUS</span>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <span class="font-semibold w-40 flex-shrink-0">Modalidade:</span>
+                                <span class="flex-1">Híbrido (Virtual e Presencial)</span>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <span class="font-semibold w-40 flex-shrink-0">Certificação:</span>
+                                <span class="flex-1">Escola de Saúde Pública do Piauí (ESP-PI)</span>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <span class="font-semibold w-40 flex-shrink-0">Público-alvo:</span>
+                                <span class="flex-1">Profissionais de Saúde do SUS e comunidade acadêmica</span>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <span class="font-semibold w-40 flex-shrink-0">Local:</span>
+                                <span class="flex-1">Atividades virtuais pela plataforma e encontros presenciais na UFPI/SESAPI.</span>
+                            </div>
+                        </dl>
+                    </div>
+
+                    
+                    <div class="bg-gray-100 p-6 rounded-xl shadow-inner">
+                        <h3 class="text-2xl font-bold mb-4" style="color: #5B3A8C;">2.2 Justificativa</h3>
+                        <p class="text-lg leading-relaxed">
+                            O princípio da equidade é fundamental para o SUS, exigindo profissionais preparados para ir além da igualdade formal. Este curso é vital para reduzir desigualdades em saúde, promovendo uma formação ética, técnica e relacional que combate o racismo institucional e o assédio. A parceria entre UFPI e SESAPI garante a qualidade acadêmica e a aplicabilidade prática no contexto real da saúde pública piauiense.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Seção Objetivos -->
+            <section id="objetivos" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">3. Objetivos</h2>
+
+                
+                <div class="mb-10 text-white p-6 rounded-xl shadow-lg" style="background-color: #FF0080;">
+                    <h3 class="text-2xl font-bold mb-3">3.1 Objetivo Geral</h3>
+                    <p class="text-lg">
+                        Promover a qualificação de trabalhadores e gestores do Sistema Único de Saúde (SUS) do Piauí e estudantes da área da saúde, visando a apropriação e a aplicação do princípio da equidade em suas práticas cotidianas e na formulação de políticas públicas, com ênfase na atenção às populações historicamente vulnerabilizadas.
+                    </p>
+                </div>
+
+                
+                <div>
+                    <h3 class="text-2xl font-bold mb-4" style="color: #5B3A8C;">3.2 Objetivos Específicos</h3>
+                    <ul class="list-disc pl-5 space-y-3 text-lg">
+                        <li>Compreender os determinantes sociais, históricos e econômicos das iniquidades em saúde.</li>
+                        <li>Reconhecer os direitos e as necessidades específicas de populações vulnerabilizadas (indígenas, quilombolas, LGBTQIA+, pessoas com deficiência).</li>
+                        <li>Desenvolver a capacidade de análise crítica sobre o racismo, assédio e outras formas de discriminação nos ambientes de trabalho e serviço.</li>
+                        <li>Promover a adoção de práticas profissionais inclusivas, éticas e acolhedoras no cuidado em saúde.</li>
+                        <li>Contribuir para a construção de planos de ação e diretrizes que visem a equidade nos serviços da SESAPI.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 4. Seção Estrutura Curricular (Conteúdo Programático) -->
+            <section id="estrutura" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">4. Estrutura Curricular (Conteúdo Programático)</h2>
+                <p class="text-lg mb-8">O curso é dividido em 5 módulos temáticos, totalizando 60 horas, com foco em aprendizagem prática e reflexiva.</p>
+
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 hover:shadow-xl transition duration-300" style="border-color: #FF0080;">
+                        <h3 class="text-xl font-bold mb-2" style="color: #5B3A8C;">Módulo 1 – Equidade em Saúde (10h)</h3>
+                        <p class="text-sm text-gray-600 mb-4">Responsável: GAT-01</p>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                            <li>Determinantes sociais da saúde.</li>
+                            <li>O princípio da equidade no SUS.</li>
+                            <li>Políticas de equidade e intersetorialidade.</li>
+                        </ul>
+                    </div>
+
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 hover:shadow-xl transition duration-300" style="border-color: #FDB92F;">
+                        <h3 class="text-xl font-bold mb-2" style="color: #5B3A8C;">Módulo 2 – Assédio e Violências (10h)</h3>
+                        <p class="text-sm text-gray-600 mb-4">Responsável: GAT-02</p>
+                        <p class="text-gray-700 text-sm">Abordagem sobre assédio moral e sexual, violência institucional e construção de ambientes de trabalho seguros.</p>
+                    </div>
+
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 hover:shadow-xl transition duration-300" style="border-color: #6B5344;">
+                        <h3 class="text-xl font-bold mb-2" style="color: #5B3A8C;">Módulo 3 – Racismo e Discriminação (10h)</h3>
+                        <p class="text-sm text-gray-600 mb-4">Responsável: GAT-03</p>
+                        <p class="text-gray-700 text-sm">Impacto do racismo estrutural na saúde e estratégias antirracistas no serviço público de saúde.</p>
+                    </div>
+
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 hover:shadow-xl transition duration-300" style="border-color: #B89FCC;">
+                        <h3 class="text-xl font-bold mb-2" style="color: #5B3A8C;">Módulo 4 – Saúde Mental dos Trabalhadores do SUS (10h)</h3>
+                        <p class="text-sm text-gray-600 mb-4">Responsável: GAT-04</p>
+                        <p class="text-gray-700 text-sm">Estratégias de cuidado e prevenção de adoecimento mental em contextos de trabalho exigentes.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 hover:shadow-xl transition duration-300" style="border-color: #FF0080;">
+                        <h3 class="text-xl font-bold mb-2" style="color: #5B3A8C;">Módulo 5 – Populações Vulnerabilizadas (10h)</h3>
+                        <p class="text-sm text-gray-600 mb-4">Responsável: GAT-05</p>
+                        <p class="text-gray-700 text-sm">Abordagem de necessidades específicas de povos tradicionais, LGBTQIA+ e outras minorias no SUS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Seção Metodologia -->
+            <section id="metodologia" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">5. Metodologia</h2>
+
+                <p class="text-lg mb-10">Nossa metodologia é centrada na participação ativa e na aplicação prática do conhecimento, utilizando as seguintes abordagens:</p>
+
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-b-4" style="border-color: #5B3A8C;">
+                        <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="#FF0080" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <h3 class="text-xl font-semibold mb-3">Aprendizagem Significativa</h3>
+                        <p class="text-gray-600">Conectando novos saberes à realidade e experiência profissional dos participantes.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-b-4" style="border-color: #FF0080;">
+                        <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="#5B3A8C" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-semibold mb-3">ABP - Problemas</h3>
+                        <p class="text-gray-600">Aprendizagem Baseada em Problemas (ABP) e Estudo de Caso reais do SUS.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-b-4" style="border-color: #5B3A8C;">
+                        <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="#FF0080" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <h3 class="text-xl font-semibold mb-3">Reflexão e Roda de Conversa</h3>
+                        <p class="text-gray-600">Momentos presenciais de discussão crítica, reflexão-ação e troca de experiências.</p>
+                    </div>
+                </div>
+
+                <div class="mt-10 p-6 bg-yellow-50 rounded-xl border border-yellow-200">
+                    <p class="font-semibold" style="color: #5B3A8C;">Formato Híbrido:</p>
+                    <ul class="list-disc pl-5 text-gray-700 mt-2">
+                        <li>**Conteúdo Autoinstrucional na plataforma:** Acesso a materiais de leitura e vídeos na plataforma SESAPI/ESP-PI.</li>
+                        <li>**Atividades Presenciais:** Rodas de Conversa e Encontros de Integração.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 6. Seção Atividades -->
+            <section id="atividades" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">6. Atividades</h2>
+                
+                <div class="space-y-12">
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-l-8" style="border-color: #5B3A8C;">
+                        <h3 class="text-3xl font-bold mb-4" style="color: #5B3A8C;">Atividade 1 – Virtual (AVA)</h3>
+                        <p class="text-lg mb-4">Componente de autoaprendizagem focado na absorção de conteúdo base.</p>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li>**Vídeo Temático:** Aulas gravadas com especialistas para cada módulo.</li>
+                            <li>**Leituras Orientadas:** Documentos oficiais do SUS e artigos acadêmicos de referência.</li>
+                            <li>**Material Educacional:** Cartilhas, infográficos e podcasts complementares.</li>
+                        </ul>
+                    </div>
+                    
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-l-8" style="border-color: #FF0080;">
+                        <h3 class="text-3xl font-bold mb-4" style="color: #FF0080;">Atividade 2 – Presencial (Rodas de Conversa)</h3>
+                        <p class="text-lg mb-4">Três encontros presenciais de diálogo e troca, essenciais para a formação reflexiva.</p>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li>**Frequência:** Três Rodas de Conversa (Novembro/2025, Dezembro/2025 e Abril/2026).</li>
+                            <li>**Participação:** Presença de especialistas, tutores e representantes de movimentos sociais parceiros.</li>
+                            <li>**Temática:** Alinhada aos eixos centrais dos módulos (Equidade, Racismo e Assédio).</li>
+                        </ul>
+                    </div>
+
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-l-8" style="border-color: #5B3A8C;">
+                        <h3 class="text-3xl font-bold mb-4" style="color: #5B3A8C;">Atividade 3 – Avaliação Conclusiva</h3>
+                        <p class="text-lg mb-4">Avaliação focada na reflexão e na capacidade de propor mudanças reais.</p>
+                        <ul class="list-decimal pl-5 space-y-2 text-gray-700">
+                            <li>**Parte 1: Questões Reflexivas:** Prova online sobre os conceitos e práticas dos módulos.</li>
+                            <li>**Parte 2: Proposta de Mudança:** Elaboração de uma diretriz ou plano de ação para promover equidade no próprio ambiente de trabalho.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 7. Seção Cronograma -->
+            <section id="cronograma" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">7. Cronograma</h2>
+
+                <div class="overflow-x-auto bg-white rounded-xl shadow-lg p-6">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Módulo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Período de Realização</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-semibold">Módulo 1 – Equidade em Saúde</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Novembro/2025</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-semibold">Módulo 2 – Assédio e Violências</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Dez/2025 – Jan/2026</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-semibold">Módulo 3 – Racismo e Discriminação</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Fevereiro/2026</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-semibold">Módulo 4 – Saúde Mental</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Março/2026</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-semibold">Módulo 5 – Populações Vulnerabilizadas</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Abril/2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-6 text-white rounded-xl shadow-lg" style="background-color: #FF0080;">
+                    <h3 class="text-2xl font-bold mb-3">Datas Chave - Rodas de Conversa Presenciais</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-lg">
+                        <li>**Roda 1:** 20 de Novembro de 2025 (Teresina)</li>
+                        <li>**Roda 2:** 15 de Dezembro de 2025 (Local a definir)</li>
+                        <li>**Roda 3:** 20 de Abril de 2026 (Encerramento e Apresentação de Diretrizes)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 8. Seção Movimentos Sociais Parceiros -->
+            <section id="movimentos" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">8. Movimentos Sociais Parceiros</h2>
+
+                <p class="text-lg mb-8">A participação social é a alma do SUS. Nosso curso integra ativamente movimentos sociais, garantindo que a formação esteja ancorada nas experiências e lutas reais.</p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-100 p-6 rounded-xl shadow-inner">
+                        <h3 class="text-2xl font-bold mb-4" style="color: #5B3A8C;">Lista de Parceiros (Exemplo)</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-lg">
+                            <li>Fórum de Mulheres Negras do Piauí.</li>
+                            <li>Associação Indígena Tabajara.</li>
+                            <li>Rede Estadual LGBTQIA+ pela Saúde.</li>
+                            <li>Conselho Estadual de Saúde.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4" style="border-color: #FF0080;">
+                        <h3 class="text-2xl font-bold mb-4" style="color: #FF0080;">Coautoria na Qualificação</h3>
+                        <p class="text-gray-700">Os parceiros atuam não apenas como convidados, mas como coautores no desenho de atividades e conteúdo, especialmente nas Rodas de Conversa, trazendo a voz da comunidade para a academia e a gestão.</p>
+                        <p class="mt-4 text-sm text-gray-500">O certificado de qualificação do curso reflete a parceria interinstitucional e a participação social.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Seção Tecnologias Educacionais -->
+            <section id="tecnologias" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">9. Tecnologias Educacionais</h2>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3" style="color: #5B3A8C;">Plataforma ESPPI</h3>
+                        <p class="text-lg text-gray-700">Todo o conteúdo autoinstrucional é acessado através do Ambiente Virtual de Aprendizagem (AVA) gerido pela SESAPI/ESP-PI. A plataforma garante a acessibilidade e o acompanhamento pedagógico individualizado.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3" style="color: #5B3A8C;">Materiais Multimídia</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-lg text-gray-700">
+                            <li>**Vídeos e Podcasts:** Produções exclusivas e curadoria de materiais da VideoSaúde.</li>
+                            <li>**Cartilhas e eBooks:** Instrumentos informativo-educativos digitais para download.</li>
+                            <li>**Repositórios:** Acesso facilitado ao AVASUS e outras bases de conhecimento.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. Seção Equipe -->
+            <section id="equipe" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">10. Equipe</h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <div class="p-6 bg-white rounded-xl shadow-lg border-t-4 text-center" style="border-color: #5B3A8C;">
+                        <img src="https://placehold.co/100x100/5B3A8C/ffffff?text=COORD" alt="Coordenador" onerror="this.onerror=null; this.src='https://placehold.co/100x100/5B3A8C/ffffff?text=COORD';" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold" style="color: #5B3A8C;">Coordenação Pedagógica</h3>
+                        <p class="text-gray-700">Prof. Dr. [Nome do Coordenador] (GAT-01)</p>
+                        <p class="text-sm text-gray-500 mt-2">Responsável pela visão curricular e gestão do projeto.</p>
+                    </div>
+
+                    
+                    <div class="p-6 bg-white rounded-xl shadow-lg border-t-4 text-center" style="border-color: #FF0080;">
+                        <img src="https://placehold.co/100x100/FF0080/ffffff?text=GATs" alt="Representantes dos GATs" onerror="this.onerror=null; this.src='https://placehold.co/100x100/FF0080/ffffff?text=GATs';" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold" style="color: #5B3A8C;">Representantes dos GATs</h3>
+                        <p class="text-gray-700">Núcleo técnico-científico do curso.</p>
+                        <p class="text-sm text-gray-500 mt-2">Profissionais e docentes responsáveis pelo conteúdo de cada módulo.</p>
+                    </div>
+
+                    
+                    <div class="p-6 bg-white rounded-xl shadow-lg border-t-4 text-center" style="border-color: #5B3A8C;">
+                        <img src="https://placehold.co/100x100/5B3A8C/ffffff?text=TUTORES" alt="Tutores e Preceptores" onerror="this.onerror=null; this.src='https://placehold.co/100x100/5B3A8C/ffffff?text=TUTORES';" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold" style="color: #5B3A8C;">Tutores e Preceptores</h3>
+                        <p class="text-gray-700">Apoio direto aos participantes.</p>
+                        <p class="text-sm text-gray-500 mt-2">Monitoria das atividades virtuais e facilitação das Rodas de Conversa.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. Seção Certificação -->
+            <section id="certificacao" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">11. Certificação</h2>
+
+                <div class="text-white p-8 rounded-xl shadow-xl" style="background-color: #FF0080;">
+                    <h3 class="text-3xl font-bold mb-4">Seu Certificado pela ESP-PI</h3>
+                    <div class="grid md:grid-cols-2 gap-8 text-lg">
+                        <div>
+                            <p class="font-semibold mb-2">Condições para Certificação:</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Conclusão de todas as atividades virtuais (100% de frequência na plataforma).</li>
+                                <li>Participação em, pelo menos, 2 das 3 Rodas de Conversa presenciais.</li>
+                                <li>Obtenção de nota positiva na Avaliação Conclusiva.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-2">Detalhes do Certificado:</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>**Carga Horária:** 60 horas.</li>
+                                <li>**Emissão:** Escola de Saúde Pública do Piauí (ESP-PI).</li>
+                                <li>**Formato:** Certificado digital com código de autenticidade da ESP-PI.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. Seção Materiais e Bibliografia -->
+            <section id="bibliografia" class="mb-20 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">12. Materiais e Bibliografia</h2>
+
+                <div class="space-y-10">
+                    
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4" style="color: #FF0080;">Documentos Oficiais do SUS</h3>
+                        <p class="text-lg mb-4">Foco nas bases legais e diretrizes que sustentam o princípio da equidade.</p>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li>Política Nacional de Saúde Integral da População Negra.</li>
+                            <li>Portaria GM/MS nº 344/2017 (Saúde LGBTQIA+).</li>
+                            <li>Políticas e Portarias específicas da SESAPI sobre Acolhimento e Combate ao Assédio.</li>
+                        </ul>
+                    </div>
+
+                    
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4" style="color: #FF0080;">Referências Acadêmicas</h3>
+                        <p class="text-lg mb-4">Textos essenciais para aprofundamento teórico sobre equidade e saúde.</p>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li>AYRES, Ricardo. O Cuidado, o Ser e o Fazer.</li>
+                            <li>LUZ, Madel T. e PAIIM, Jair. A Luta pela Reforma Sanitária.</li>
+                            <li>Artigos e capítulos de livros sobre Determinantes Sociais em Saúde.</li>
+                        </ul>
+                    </div>
+                    
+                    
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4" style="color: #FF0080;">Materiais Multimídia</h3>
+                        <p class="text-lg mb-4">Recursos audiovisuais e interativos para facilitar a aprendizagem.</p>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li>VideoSaúde (Coleção Equidade e Racismo).</li>
+                            <li>Repositório AVASUS.</li>
+                            <li>Podcasts sobre Saúde Mental do Trabalhador do SUS.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 13. Seção Inscrições -->
+            <section id="inscricoes" class="mb-20 bg-gray-100 p-10 rounded-xl shadow-2xl relative overflow-hidden pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">13. Inscrições</h2>
+
+                <div class="grid lg:grid-cols-3 gap-10">
+                    <div class="lg:col-span-2">
+                        <h3 class="text-2xl font-bold mb-4" style="color: #FF0080;">Passo a Passo para Inscrição</h3>
+                        <ol class="list-decimal pl-5 space-y-4 text-lg">
+                            <li>**Acesse o Link Oficial:** Clique no botão de inscrição abaixo para ser redirecionado à plataforma da ESP-PI.</li>
+                            <li>**Preencha o cadastro:** Informe seus dados e acesse a plataforma.  </li>
+                        </ol>
+                        
+                        <a href="login.html" target="_blank" class="mt-8 inline-block bg-ufpi-blue text-white hover:bg-indigo-800 px-12 py-4 rounded-xl text-xl font-bold shadow-lg transition duration-300 transform hover:scale-105">
+                            Link Direto para Inscrição
+                        </a>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4" style="color: #5B3A8C;">FAQ (Perguntas Frequentes)</h3>
+                        <ul class="space-y-4">
+                            <li>
+                                <p class="font-semibold">O curso tem custo?</p>
+                                <p class="text-gray-700 text-sm">Não. É um curso gratuito, financiado pelo PET-Saúde Equidade.</p>
+                            </li>
+                            <li>
+                                <p class="font-semibold">Posso participar se não for do Piauí?</p>
+                                <p class="text-gray-700 text-sm">O foco principal é nos profissionais da SESAPI/PI.</p>
+                            </li>
+                            <li>
+                                <p class="font-semibold">Qual a carga horária total?</p>
+                                <p class="text-gray-700 text-sm">O curso tem 60 horas totais.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. Seção Contato -->
+            <section id="contato" class="mb-10 relative pt-12">
+                <!-- Personagem Rosa (removida: usamos o presenter fixo) -->
+                <h2 class="text-4xl font-extrabold mb-10 border-b-4 pb-2" style="color: #5B3A8C; border-color: #FF0080;">14. Contato</h2>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-ufpi-blue mb-4">Informações</h3>
+                        <div class="flex items-start space-x-3">
+                            <svg class="w-6 h-6 text-esp-teal flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <div>
+                                <p class="font-semibold text-lg">E-mail da ESP-PI:</p>
+                                <a href="mailto:escoladesaudepublicapi@gmail.com" class="text-ufpi-blue hover:underline">escoladesaudepublicapi@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <svg class="w-6 h-6 text-esp-teal flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <div>
+                                <p class="font-semibold text-lg">Endereço (ESP-PI):</p>
+                                <p class="text-gray-700">Av. Pedro Freitas, S/N - Vermelha, Teresina - PI, 64018-900</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-t-4" style="border-color: #FF0080;">
+                        <h3 class="text-2xl font-bold text-ufpi-blue mb-4">Envie sua Dúvida</h3>
+                        <form id="contactForm" class="space-y-4">
+                            <div>
+                                <label for="nome_form" class="block text-sm font-medium text-gray-700">Nome Completo</label>
+                                <input type="text" id="nome_form" name="nome_form" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-esp-teal focus:border-esp-teal p-2" placeholder="Seu nome completo" required>
+                            </div>
+                            <div>
+                                <label for="email_form" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="email_form" name="email_form" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-esp-teal focus:border-esp-teal p-2" placeholder="seu.email@exemplo.com" required>
+                            </div>
+                            <div>
+                                <label for="mensagem_form" class="block text-sm font-medium text-gray-700">Mensagem</label>
+                                <textarea id="mensagem_form" name="mensagem_form" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-esp-teal focus:border-esp-teal p-2" placeholder="Sua dúvida ou sugestão" required></textarea>
+                            </div>
+                            <a href="mailto:escoladesaudepublicapi@gmail.com?subject=Contato%20via%20site&body=Olá%2C%0A%0A" class="w-full inline-block text-center bg-ufpi-blue text-white py-3 rounded-lg font-semibold hover:bg-indigo-800 transition duration-200 shadow-md">
+                                Enviar Mensagem
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-white mt-10" style="background-color: #5B3A8C;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid md:grid-cols-3 gap-8 border-b border-indigo-700 pb-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: #FF0080;">PET-Saúde Equidade</h3>
+                    <p class="text-sm">
+                        Um projeto de Educação Interprofissional em Equidade e Saúde para o fortalecimento do SUS no Piauí. Parceria UFPI, NESP, ESP-PI, SESAPI, governo do Piauí e SUS.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: #FF0080;">Navegação</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#sobre" class="hover:text-esp-teal transition duration-150">O Curso</a></li>
+                        <li><a href="#estrutura" class="hover:text-esp-teal transition duration-150">Estrutura Curricular</a></li>
+                        <li><a href="#inscricoes" class="hover:text-esp-teal transition duration-150">Inscrições</a></li>
+                        <li><a href="#contato" class="hover:text-esp-teal transition duration-150">Fale Conosco</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: #FF0080;">Apoio</h3>
+                    <div class="flex flex-wrap space-x-4 opacity-80">
+                        <!-- Logos no Rodapé (Placeholders) -->
+                        <img src="/imagem/PET.png" alt="Logo PET" onerror="this.onerror=null; this.src='/imagem/PET.png';" class="h-8 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/NESP.png" alt="Logo NESP" onerror="this.onerror=null; this.src='/imagem/NESP.png';" class="h-8 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/UFPI.png" alt="Logo UFPI" onerror="this.onerror=null; this.src='/imagem/UFPI.png';" class="h-8 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                        <img src="/imagem/ESPPI.png" alt="Logo ESPPI" onerror="this.onerror=null; this.src='/imagem/ESPPI.png';" class="h-8 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+
+                        <img src="/imagem/SESAPI.png" alt="Logo SESAPI" onerror="this.onerror=null; this.src='/imagem/SESAPI.png';" class="h-8 grayscale hover:grayscale-0 transition duration-300 rounded-lg">
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-sm text-indigo-300">
+                &copy; 2025 PET-Saúde Equidade. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+    <!-- Personagem apresentadora fixa (criada por script) -->
+    <div id="rosa-presenter" aria-hidden="true" class="" style="display:none;">
+        <!-- Será preenchido via script -->
+    </div>
+    <script>
+        (function(){
+            // Cria o elemento da personagem apresentadora e o balão
+            const presenter = document.getElementById('rosa-presenter');
+            presenter.innerHTML = `
+                <div class="rosa-bubble" role="note" aria-live="polite"></div>
+                <img src="imagem/rosa_personagem.png" alt="Personagem Rosa" />
+            `;
+
+            const bubble = presenter.querySelector('.rosa-bubble');
+            const img = presenter.querySelector('img');
+
+            // Função para mostrar o presenter
+            function showPresenter() {
+                presenter.style.display = 'flex';
+                // permitir CSS mostrar o balão via classe
+                setTimeout(()=> presenter.classList.add('show'), 60);
+            }
+
+            // Função para atualizar o texto do balão
+            function updateBubble(text) {
+                if(!text) return;
+                bubble.textContent = text;
+                showPresenter();
+            }
+
+            // Mostrar presenter ao clicar nos botões 'Inscreva-se'
+            document.querySelectorAll('.show-rosa-on-click').forEach(a => {
+                a.addEventListener('click', (e) => {
+                    // Quando o usuário clicar, exibe a personagem e atualiza baseado na âncora alvo
+                    const targetId = (a.getAttribute('href') || '').replace('#','');
+                    if(targetId) {
+                        const section = document.getElementById(targetId);
+                        if(section) {
+                            const h2 = section.querySelector('h2');
+                            const title = h2 ? h2.textContent.trim() : section.id;
+                            updateBubble('Apresentando: ' + title);
+                        }
+                    }
+                });
+            });
+
+            // Observer para atualizar conforme rola pelas seções
+            const sections = Array.from(document.querySelectorAll('main section[id]'));
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting && entry.intersectionRatio > 0.45) {
+                        const h2 = entry.target.querySelector('h2');
+                        const title = h2 ? h2.textContent.trim() : entry.target.id;
+                        updateBubble(title);
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: [0.45, 0.6] });
+
+            sections.forEach(s => io.observe(s));
+
+            // Pequena interação: ao clicar na imagem, abrir/fechar o balão
+            img.addEventListener('click', () => {
+                if(presenter.classList.contains('show')) {
+                    presenter.classList.remove('show');
+                } else {
+                    presenter.classList.add('show');
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>
