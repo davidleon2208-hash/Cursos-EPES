@@ -1,0 +1,140 @@
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Paleta fornecida */
+    --color-primary: #5B3A8C; /* Roxo Escuro */
+    --color-secondary: #FF0080; /* Magenta */
+    --color-accent: #FDB92F; /* Laranja */
+    --color-support: #6B5344; /* Marrom */
+    --color-complement: #B89FCC; /* Roxo Claro */
+
+    /* Neutros */
+    --bg: #f4f7f6;
+    --text: #333333;
+    --muted: #666666;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--bg);
+}
+
+/* Utilitário de Layout */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Cabeçalho (Hero Section) */
+.hero {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    padding: 80px 0;
+    text-align: center;
+    border-bottom: 5px solid var(--color-complement);
+}
+
+.hero h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.hero .subtitle {
+    font-size: 1.2em;
+    font-weight: 300;
+    opacity: 0.95;
+    color: rgba(255,255,255,0.9);
+}
+
+/* Conteúdo Principal */
+.content {
+    padding: 40px 20px;
+}
+
+.course-overview, .target-audience {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--color-support);
+}
+
+h2 {
+    color: var(--color-primary);
+    font-size: 1.8em;
+    border-bottom: 2px solid var(--color-complement);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.course-overview p, .target-audience p {
+    margin-bottom: 15px;
+}
+
+.course-overview ul {
+    list-style-type: '👉'; /* Estilo visual atraente para lista */
+    padding-left: 20px;
+}
+
+.course-overview li {
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+/* Call to Action (CTA) Box */
+.cta-box {
+    text-align: center;
+    padding: 30px;
+    margin: 40px auto;
+    background-color: rgba(184,159,204,0.10); /* leve tom do roxo claro */
+    border: 1px solid var(--color-support);
+    border-radius: 8px;
+}
+
+.cta-text {
+    font-size: 1.5em;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Botão de Inscrição */
+.btn-inscricao {
+    display: inline-block;
+    background-color: var(--color-secondary);
+    color: #ffffff;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 50px; /* Botão arredondado e moderno */
+    transition: background-color 0.18s, transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 6px 18px rgba(255, 0, 128, 0.12);
+    border: 2px solid rgba(0,0,0,0.06);
+}
+
+.btn-inscricao:hover {
+    background-color: #e60072; /* leve escurecimento do magenta */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(255, 0, 128, 0.18);
+}
+
+/* Rodapé */
+.footer {
+    background-color: var(--color-support);
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
+    font-size: 0.9em;
+}
