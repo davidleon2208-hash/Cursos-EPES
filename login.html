@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma ESPPI</title>
+    <title>Plataforma ESPPI - Login</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* ======== Estilos Gerais ======== */
@@ -17,6 +17,115 @@
         body {
             background-color: #f3f6fa;
             color: #333;
+        }
+
+        /* ======== Tela de Login ======== */
+        .login-container {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #004aad, #0077ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #004aad;
+            font-size: 1.8em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .login-box label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #004aad;
+            box-shadow: 0 0 5px rgba(0, 74, 173, 0.2);
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .login-box button:hover {
+            background-color: #003380;
+        }
+
+        .login-box button:active {
+            background-color: #002560;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-link a {
+            color: #004aad;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .success-message {
+            color: #388e3c;
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        /* ======== Plataforma (oculta por padrão) ======== */
+        #plataforma {
+            display: none;
         }
 
         header {
@@ -44,69 +153,6 @@
             color: #ffcc00;
         }
 
-        /* ======== Container Principal ======== */
-        .container {
-            display: flex;
-            padding: 20px;
-        }
-
-        aside {
-            width: 250px;
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-right: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        aside h2 {
-            color: #004aad;
-            margin-bottom: 10px;
-        }
-
-        aside ul {
-            list-style: none;
-        }
-
-        aside ul li {
-            margin: 10px 0;
-        }
-
-        aside ul li a {
-            color: #333;
-            text-decoration: none;
-            padding: 8px;
-            display: block;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        aside ul li a:hover {
-            background-color: #004aad;
-            color: white;
-        }
-
-        main {
-            flex: 1;
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        main h2 {
-            color: #004aad;
-            margin-bottom: 15px;
-        }
-
-        .card {
-            background-color: #f7f9fc;
-            border-left: 5px solid #004aad;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-
         footer {
             background-color: #004aad;
             color: white;
@@ -114,54 +160,6 @@
             padding: 10px;
             margin-top: 30px;
         }
-
-        /* ======== Tela de Login ======== */
-        .login-container {
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(135deg, #004aad, #0077ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            width: 350px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .login-box h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #004aad;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 10px;
-            background-color: #004aad;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .login-box button:hover {
-            background-color: #003380;
-        }
-
     </style>
 </head>
 <body>
@@ -170,94 +168,110 @@
     <div class="login-container" id="login">
         <div class="login-box">
             <h2>Login</h2>
-            <input type="text" placeholder="Usuário">
-            <input type="password" placeholder="Senha">
-            <button onclick="entrar()">Entrar</button>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="emailLogin">Email:</label>
+                    <input type="email" id="emailLogin" name="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="passwordLogin">Senha:</label>
+                    <input type="password" id="passwordLogin" name="password" placeholder="Sua senha" required>
+                </div>
+                <button type="submit">Entrar</button>
+                <div class="error-message" id="errorMsg"></div>
+                <div class="success-message" id="successMsg"></div>
+            </form>
+            <div class="register-link">
+                <p>Não tem conta? <a href="aviso.html" target="_blank">Faça seu cadastro aqui</a></p>
+            </div>
         </div>
     </div>
 
     <!-- PLATAFORMA PRINCIPAL -->
-    <div id="plataforma" style="display:none;">
+    <div id="plataforma">
         <header>
-            <h1>Plataforma</h1>
+            <h1>Plataforma PET-Saúde Equidade</h1>
             <nav>
-                <a href="#">Início</a>
-                <a href="#">Módulos</a>
-                <a href="#">Sair</a>
+                <a href="index.html">Início</a>
+                <a href="#" onclick="handleLogout()">Sair</a>
             </nav>
         </header>
 
-        <div class="container">
-            <main>
-                <h2>Bem-vindo(a), Cursista!</h2>
-        <header class="content-header">
-          <div class="logo-placeholder">
-            <svg
-              class="logo-icon"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="50" cy="50" r="50" fill="#642f8d" />
-              <text
-                x="50"
-                y="65"
-                font-family="Arial, sans-serif"
-                font-size="40"
-                fill="white"
-                text-anchor="middle"
-              >
-                PET
-              </text>
-            </svg>
-          </div>
-          <span class="page-title-mobile"
-            >Educação Profissional Equidade em Saúde</span
-          >
-        </header>
-
-        <nav class="secondary-nav">
-          <a href="index.html" class="principal-link">Início</a>
-          <a href="modulos.html" class="modulo-link">Módulos</a>
-        </nav>
-
-        <h1 class="main-heading">Educação Profissional Equidade em Saúde</h1>
-
-        <div class="content-card">
-          <div class="image-placeholder"></div>
-          <p class="welcome-message">Boas-vindas!</p>
-        </div>
-
-        <div class="enrollment-status">
-          <p class="status-message">Você está inscrito neste curso.</p>
-          <a class="course-button" href="md01.html" role="button"
-            >Ir para o Curso</a
-          >
-        </div>
-        <hr class="section-divider" />
-        <footer class="page-footer">
-          <div class="footer-box">
-            <img src="Imagem/PET.png" alt="Logotipo PET Equidade" />
-            <img src="Imagem/NESP.png" alt="Logotipo NESP" />
-            <img src="Imagem/UFPI.png" alt="Logotipo UFPI" />
-            <img src="Imagem/ESPPI.png" alt="Logotipo ESP-PI" />
-            <img src="Imagem/sesapi.png" alt="Logotipo SESAPI" />
-            <img src="Imagem/SUS.png" alt="Logotipo SUS" />
-          </div>
-        </footer>
-            </main>
-        </div>
+        <main style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+            <h2>Bem-vindo(a), <span id="userName">Cursista</span>!</h2>
+            <p style="margin-bottom: 20px;">Você está inscrito neste curso.</p>
+            <a href="md01.html" style="display: inline-block; padding: 12px 30px; background-color: #004aad; color: white; text-decoration: none; border-radius: 5px;">Acessar Módulos</a>
+        </main>
 
         <footer>
-            © 2025 - Plataforma Es | Desenvolvido por David Leôncio
+            © 2025 - Plataforma PET-Saúde Equidade | Desenvolvido por David Leôncio
         </footer>
     </div>
 
     <script>
-        function entrar() {
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('emailLogin').value;
+            const password = document.getElementById('passwordLogin').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+            
+            try {
+                // Aqui você chamaria seu servidor real
+                // const response = await fetch('http://localhost:3001/login', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ email, password })
+                // });
+                
+                // Para demo, simulamos sucesso:
+                const response = { ok: true, user: { name: 'Usuário Demo', email } };
+                
+                if (response.ok) {
+                    // Salvar dados de sessão (localStorage - apenas para demo)
+                    localStorage.setItem('user', JSON.stringify(response.user));
+                    successMsg.textContent = 'Login realizado com sucesso!';
+                    successMsg.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        showDashboard(response.user.name);
+                    }, 1000);
+                } else {
+                    errorMsg.textContent = 'Credenciais inválidas. Tente novamente.';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                errorMsg.textContent = 'Erro ao conectar. Tente novamente mais tarde.';
+                errorMsg.style.display = 'block';
+                console.error('Erro:', error);
+            }
+        }
+
+        function showDashboard(userName) {
             document.getElementById('login').style.display = 'none';
             document.getElementById('plataforma').style.display = 'block';
+            document.getElementById('userName').textContent = userName;
         }
-    </script>
 
+        function handleLogout() {
+            localStorage.removeItem('user');
+            document.getElementById('plataforma').style.display = 'none';
+            document.getElementById('login').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        }
+
+        // Verificar se usuário já está logado
+        window.addEventListener('load', () => {
+            const user = localStorage.getItem('user');
+            if (user) {
+                const userData = JSON.parse(user);
+                showDashboard(userData.name);
+            }
+        });
+    </script>
 </body>
 </html>
