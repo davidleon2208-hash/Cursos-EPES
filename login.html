@@ -15,15 +15,15 @@
         }
 
         body {
-            background-color: #f3f6fa;
-            color: #333;
+            background-color: var(--color-background);
+            color: var(--color-text-dark);
         }
 
         /* ======== Tela de Login ======== */
         .login-container {
             width: 100%;
             min-height: 100vh;
-            background: linear-gradient(135deg, #004aad, #0077ff);
+            background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-claro));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -42,7 +42,7 @@
         .login-box h2 {
             text-align: center;
             margin-bottom: 25px;
-            color: #004aad;
+            color: var(--roxo-escuro);
             font-size: 1.8em;
         }
 
@@ -68,30 +68,30 @@
 
         .login-box input:focus {
             outline: none;
-            border-color: #004aad;
-            box-shadow: 0 0 5px rgba(0, 74, 173, 0.2);
+            border-color: var(--magenta);
+            box-shadow: 0 0 6px rgba(255, 0, 128, 0.16);
         }
 
         .login-box button {
             width: 100%;
             padding: 12px;
-            background-color: #004aad;
-            color: white;
+            background-color: var(--laranja);
+            color: var(--text-on-primary);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
             font-size: 1em;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s, transform 0.04s;
         }
 
         .login-box button:hover {
-            background-color: #003380;
+            background-color: var(--magenta);
         }
 
         .login-box button:active {
-            background-color: #002560;
+            transform: translateY(1px);
         }
 
         .register-link {
@@ -100,7 +100,7 @@
         }
 
         .register-link a {
-            color: #004aad;
+            color: var(--roxo-escuro);
             text-decoration: none;
             font-weight: 600;
         }
@@ -129,8 +129,8 @@
         }
 
         header {
-            background-color: #004aad;
-            color: #fff;
+            background-color: var(--roxo-escuro);
+            color: var(--text-on-primary);
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
@@ -142,20 +142,20 @@
         }
 
         nav a {
-            color: white;
+            color: var(--text-on-primary);
             text-decoration: none;
             margin-left: 20px;
             font-weight: bold;
-            transition: 0.3s;
+            transition: 0.2s;
         }
 
         nav a:hover {
-            color: #ffcc00;
+            color: var(--laranja);
         }
 
         footer {
-            background-color: #004aad;
-            color: white;
+            background-color: var(--roxo-escuro);
+            color: var(--text-on-primary);
             text-align: center;
             padding: 10px;
             margin-top: 30px;
